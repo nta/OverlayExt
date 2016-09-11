@@ -23,7 +23,7 @@ function ayria_plugin(name)
 			optimize "Speed"
 
 		-- reset filter
-		filter()
+		filter {}
 
 		targetdir "bin/%{cfg.platform}/%{cfg.buildcfg}/"
 		objdir "obj/%{cfg.platform}/%{cfg.buildcfg}/"
@@ -35,12 +35,12 @@ function ayria_plugin(name)
 		targetname(name)
 
 		filter "platforms:Win32"
-			targetextension "Ayria32"
+			targetextension ".Ayria32"
 
 		filter "platforms:Win64"
-			targetextension "Ayria64"
+			targetextension ".Ayria64"
 
-		filter()
+		filter {}
 
 		pchsource "src/StdInc.cpp"
 		pchheader "StdInc.h"
@@ -50,10 +50,12 @@ function ayria_plugin(name)
 		files
 		{
 			"src/**.cpp",
+			"src/**.cc",
+			"src/**.c",
 			"src/**.h",
 			"include/**.hpp",
 			"include/**.h",
 		}
 
-		postbuildcommands { "if exist \"$(SolutionDir)\\..\\postbuild.cmd\" call \"$(SolutionDir)\\..\\postbuild.cmd\" %{prj.name}" }
+		postbuildcommands { "if exist \"$(SolutionDir)..\\postbuild.cmd\" call \"$(SolutionDir)..\\postbuild.cmd\" \"$(TargetPath)\" \"$(TargetFileName)\" %{prj.name}" }
 end
