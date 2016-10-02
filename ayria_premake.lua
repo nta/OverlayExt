@@ -34,6 +34,8 @@ function ayria_plugin(name)
 
 		targetname(name)
 
+		defines { "AYRIA_EXTENSION_NAME=" .. name, "BUILDHOST=" .. (os.getenv("COMPUTERNAME") or os.getenv("HOSTNAME")) }
+
 		filter "platforms:Win32"
 			targetextension ".Ayria32"
 
