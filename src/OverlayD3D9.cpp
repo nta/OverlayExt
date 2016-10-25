@@ -18,18 +18,44 @@ struct D3D9HookData
 
 	D3D9HookData(IDirect3DDevice9* device)
 	{
-		device->CreateTexture(480, 272, 1, D3DUSAGE_DYNAMIC, D3DFMT_DXT5, D3DPOOL_DEFAULT, texture.GetAddressOf(), nullptr);
+		Create(device);
+	}
+
+	void Create(IDirect3DDevice9* device)
+	{
+		device->CreateTexture(480, 272, 1, D3DUSAGE_DYNAMIC, D3DFMT_DXT5, D3DPOOL_DEFAULT, texture.ReleaseAndGetAddressOf(), nullptr);
 
 		D3DLOCKED_RECT lr;
 		texture->LockRect(0, &lr, nullptr, D3DLOCK_DISCARD);
-		
+
 		memcpy(lr.pBits, data, sizeof(data));
 
 		texture->UnlockRect(0);
 	}
+
+	void Release()
+	{
+		texture.Reset();
+	}
 };
 
 using D3D9HookDataRef = std::shared_ptr<D3D9HookData>;
+
+static HRESULT(__stdcall* g_origReset)(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* pParams);
+
+HRESULT __stdcall ResetStub(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* pParams)
+{
+	FuncTrace("Handling D3D9 reset.\n");
+
+	Hooking::COM::RefContainer<D3D9HookDataRef> hookData(device);
+	hookData.Get()->Release();
+
+	HRESULT hr = g_origReset(device, pParams);
+
+	hookData.Get()->Create(device);
+
+	return hr;
+}
 
 static HRESULT(__stdcall* g_origEndScene)(IDirect3DDevice9* device);
 
@@ -41,7 +67,7 @@ HRESULT __stdcall EndSceneStub(IDirect3DDevice9* device)
 		ComPtr<IDirect3DStateBlock9> stateBlock;
 		device->CreateStateBlock(D3DSBT_ALL, stateBlock.GetAddressOf());
 
-		stateBlock->Capture();
+		//stateBlock->Capture();
 
 		device->SetFVF(D3DFVF_XYZ | D3DFVF_TEX1);
 		device->SetVertexShader(nullptr);
@@ -106,6 +132,7 @@ static void HookInterface(IDirect3DDevice9* pInterface)
 	hookData.Attach<IDirect3DDevice9>(pInterface);
 
 	Hooking::COM::ReplaceVmtFunction(pInterface, &IDirect3DDevice9::EndScene, EndSceneStub, &g_origEndScene);
+	Hooking::COM::ReplaceVmtFunction(pInterface, &IDirect3DDevice9::Reset, ResetStub, &g_origReset);
 }
 
 static void HookInterface(IDirect3DDevice9Ex* pInterface)
