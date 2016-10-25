@@ -22,6 +22,10 @@ namespace Hooking
 		{
 			g_hookBackend = GetDefaultBackend();
 		}
+
+        FuncTrace("Initialized hooking with backend %s.\n", backend->GetName());
+
+        return true;
 	}
 
 	//
