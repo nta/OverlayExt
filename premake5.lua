@@ -6,6 +6,7 @@ ayria_plugin 'OverlayExt'
     includedirs
     {
         'vendor/minhook/include',
+        os.getenv('BOOST_ROOT')
     }
 
     filter 'action:vs*'
