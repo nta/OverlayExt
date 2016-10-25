@@ -33,8 +33,8 @@ namespace Hooking
 	//
 	// Installs a trampoline hook on an API.
 	//
-	template<typename T, typename TOrig = void>
-	bool InstallAPIHook(const char* moduleName, const char* functionName, const void* hookFunction, TOrig* originalFunction = nullptr)
+	template<typename TOrig = void>
+	bool InstallAPIHook(const char* moduleName, const char* functionName, void* hookFunction, TOrig* originalFunction = nullptr)
 	{
 		void* apiAddress = LookupAPIStart(moduleName, functionName);
 
