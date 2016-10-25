@@ -6,7 +6,7 @@ static Hooking::Internal::IHookBackend* g_hookBackend = nullptr;
 
 namespace Hooking
 {
-	bool InitializeHooking(Internal::IHookBackend* backend = nullptr)
+	bool InitializeHooking(Internal::IHookBackend* backend)
 	{
 		if (g_hookBackend)
 		{
