@@ -26,7 +26,7 @@ namespace Hooking::Internal
 
 		if (status != MH_OK)
 		{
-			Trace("MinHook failed to create hook for %p - status %x (%s)\n", hookAddress, status, MH_StatusToString(status));
+			FuncTrace("failed to create hook for %p - status %x (%s)\n", hookAddress, status, MH_StatusToString(status));
 			return false;
 		}
 
@@ -34,7 +34,7 @@ namespace Hooking::Internal
 
         if (status != MH_OK)
         {
-            Trace("MinHook failed to enable hook for %p - status %x (%s)\n", hookAddress, status, MH_StatusToString(status));
+            FuncTrace("failed to enable hook for %p - status %x (%s)\n", hookAddress, status, MH_StatusToString(status));
             return false;
         }
 
