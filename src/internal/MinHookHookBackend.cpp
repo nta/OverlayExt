@@ -3,28 +3,41 @@
 
 #include <MinHook.h>
 
+struct MinHookInitialize
+{
+	MinHookInitialize()
+	{
+		MH_Initialize();
+	}
+
+	~MinHookInitialize()
+	{
+		MH_Uninitialize();
+	}
+};
+
+static MinHookInitialize mhInit;
+
 namespace Hooking::Internal
 {
-	void* Win32HookBackend::LookupAPIStart(const char* moduleName, const char* functionName)
-	{
-		// cache a widestring version of the name
-		std::wstring moduleNameWide = StringToWide(moduleName);
+    bool MinHookHookBackend::InstallTrampolineHook(void* hookAddress, void* replacementFunction, void** originalFunction)
+    {
+		MH_STATUS status = MH_CreateHook(hookAddress, replacementFunction, originalFunction);
 
-		// is the image already loaded by this name?
-		HMODULE hModule = GetModuleHandleW(moduleNameWide.c_str());
-
-		// if not, try loading it
-		if (!hModule)
+		if (status != MH_OK)
 		{
-			hModule = LoadLibraryW(moduleNameWide.c_str());
+			Trace("MinHook failed to create hook for %p - status %x (%s)\n", hookAddress, status, MH_StatusToString(status));
+			return false;
 		}
 
-		// still no module? error out.
-		if (!hModule)
-		{
-			return nullptr;
-		}
+        status = MH_EnableHook(hookAddress);
 
-		return GetProcAddress(hModule, functionName);
+        if (status != MH_OK)
+        {
+            Trace("MinHook failed to enable hook for %p - status %x (%s)\n", hookAddress, status, MH_StatusToString(status));
+            return false;
+        }
+
+        return true;
 	}
 }
