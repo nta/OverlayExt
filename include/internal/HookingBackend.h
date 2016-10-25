@@ -21,7 +21,7 @@ namespace Hooking
 			//
 			// Destructor.
 			//
-			virtual ~IHookBackend() = 0;
+			virtual ~IHookBackend() = default;
 
 			//
 			// Gets the name of the final composed backend service.
@@ -35,7 +35,7 @@ namespace Hooking
 			//
 			// Destructor.
 			//
-			virtual ~IHookAPIBackend() = 0;
+			virtual ~IHookAPIBackend() = default;
 
 			//
 			// Backend function for `Hooking::LookupAPIStart`.
@@ -50,7 +50,7 @@ namespace Hooking
 			//
 			// Destructor.
 			//
-			virtual ~IHookTrampolineBackend() = 0;
+			virtual ~IHookTrampolineBackend() = default;
 
 			//
 			// Backend function for `Hooking::InstallTrampolineHook`.
