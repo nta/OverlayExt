@@ -8,4 +8,4 @@ void Trace(const char* format, ...);
 //
 // Outputs an annotated string to the log output.
 //
-#define FuncTrace(x, ...) Trace(__FUNCTION__ ## x, __VA_ARGS__)
+#define FuncTrace(x, ...) Trace(__FUNCTION__ ## ": " ## x, __VA_ARGS__)
