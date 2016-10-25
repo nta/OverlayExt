@@ -8,6 +8,9 @@ ayria_plugin 'OverlayExt'
         'vendor/minhook/include',
     }
 
+    filter 'action:vs*'
+        buildoptions '/std:c++latest'
+
 group 'vendor'
 project 'minhook'
     language 'C'
