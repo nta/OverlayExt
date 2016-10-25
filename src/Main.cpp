@@ -5,19 +5,19 @@
 
 AYRIA_EXTENSION_API void AYRIA_EXTENSION_CALL onInitializationStart()
 {
-	Trace("Initializing extension! Woo-hoo!\n");
+	FuncTrace("Initializing extension.\n");
 
 	Hooking::InitializeHooking();
 }
 
 AYRIA_EXTENSION_API void AYRIA_EXTENSION_CALL onInitializationComplete()
 {
-	Trace("Initialized extension! Yippee!\n");
+    FuncTrace("Initialized extensions.\n");
 }
 
 AYRIA_EXTENSION_API void AYRIA_EXTENSION_CALL onExtensionUnloading()
 {
-	Trace("Unloading extension. Bye!\n");
+    FuncTrace("Unloading extension.\n");
 }
 
 AYRIA_EXTENSION_API void AYRIA_EXTENSION_CALL onMessage(uint32_t messageId, ...)
