@@ -49,7 +49,7 @@ void Trace(const char* format, ...)
 
 		std::call_once(initFlag, [] ()
 		{
-			if ((logFile =_fsopen(GetLogPath(), "w", _SH_DENYNO)) == nullptr)
+			if ((logFile = _fsopen(GetLogPath(), "w", _SH_DENYNO)) == nullptr)
 			{
 				logFile = InvalidLogFile;
 			}
@@ -71,8 +71,6 @@ void Trace(const char* format, ...)
 		});
 	}
 
-	// enter the logging mutex
-	std::lock_guard<std::mutex> lock(logMutex);
 
 	// format the log string
 	static thread_local std::vector<char> logBuffer(32768);
@@ -102,20 +100,25 @@ void Trace(const char* format, ...)
 		}
 	}
 
-	// write to the file
-	if (logFile != InvalidLogFile)
+	// enter the logging mutex
 	{
-		// TODO: only print time if there's a new line
-		static uint64_t startTimer = GetSystemTimer();
+		std::lock_guard<std::mutex> lock(logMutex);
 
-		fprintf(logFile, "[%08llu] %s", GetSystemTimer() - startTimer, logBuffer.data());
-		fflush(logFile);
-	}
+		// write to the file
+		if (logFile != InvalidLogFile)
+		{
+			// TODO: only print time if there's a new line
+			static uint64_t startTimer = GetSystemTimer();
 
-	// write to a console
-	{
-		fprintf(stdout, "%s", logBuffer.data());
-		fflush(stdout);
+			fprintf(logFile, "[%08llu] %s", GetSystemTimer() - startTimer, logBuffer.data());
+			fflush(logFile);
+		}
+
+		// write to a console
+		{
+			fprintf(stdout, "%s", logBuffer.data());
+			fflush(stdout);
+		}
 	}
 
 	// write to debuggers
