@@ -23,17 +23,17 @@ AYRIA_EXTENSION_API void AYRIA_EXTENSION_CALL onMessage(uint32_t messageId, ...)
 //
 // Called on onInitializationStart, after InitFunctions have run.
 //
-ayria::Event<> InitStartEvent;
+extern ayria::Event<> InitStartEvent;
 
 //
 // Called on onInitializationComplete.
 //
-ayria::Event<> InitCompleteEvent;
+extern ayria::Event<> InitCompleteEvent;
 
 //
 // Called on onExtensionUnloading.
 //
-ayria::Event<> UnloadEvent;
+extern ayria::Event<> UnloadEvent;
 
 //
 // Called on onMessage.
@@ -41,4 +41,4 @@ ayria::Event<> UnloadEvent;
 // - the message ID
 // - a function returning the va_list for the arguments to the message
 //
-ayria::Event<uint32_t, std::function<va_list()>> MessageEvent;
+extern ayria::Event<uint32_t, std::function<va_list()>> MessageEvent;
