@@ -16,13 +16,13 @@ namespace Hooking
 
 		if (!backend)
 		{
-            backend = GetDefaultBackend();
+			backend = GetDefaultBackend();
 		}
 
-        FuncTrace("Initialized hooking with backend %s.\n", backend->GetName());
-        g_hookBackend = backend;
+		FuncTrace("Initialized hooking with backend %s.\n", backend->GetName());
+		g_hookBackend = backend;
 
-        return true;
+		return true;
 	}
 
 	//

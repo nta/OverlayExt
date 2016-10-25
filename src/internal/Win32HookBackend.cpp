@@ -22,19 +22,19 @@ namespace Hooking::Internal
 		// still no module? error out.
 		if (!hModule)
 		{
-            auto lastError = GetLastError();
-            FuncTrace("Could not load module %s (error code %d).\n", moduleName, lastError);
+			auto lastError = GetLastError();
+			FuncTrace("Could not load module %s (error code %d).\n", moduleName, lastError);
 
 			return nullptr;
 		}
 
 		void* pFunc = GetProcAddress(hModule, functionName);
 
-        if (!pFunc)
-        {
-            FuncTrace("Could not find function %s in module %s.\n", functionName, moduleName);
-        }
+		if (!pFunc)
+		{
+			FuncTrace("Could not find function %s in module %s.\n", functionName, moduleName);
+		}
 
-        return pFunc;
+		return pFunc;
 	}
 }

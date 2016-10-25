@@ -7,18 +7,18 @@
 class InitFunctionBase
 {
 protected:
-    InitFunctionBase* m_next;
+	InitFunctionBase* m_next;
 
-    int m_order;
+	int m_order;
 
 public:
-    InitFunctionBase(int order = 0);
+	InitFunctionBase(int order = 0);
 
-    virtual void Run() = 0;
+	virtual void Run() = 0;
 
-    void Register();
+	void Register();
 
-    static void RunAll();
+	static void RunAll();
 };
 
 //
@@ -28,19 +28,19 @@ public:
 class InitFunction : public InitFunctionBase
 {
 private:
-    void(*m_function)();
+	void(*m_function)();
 
 public:
-    InitFunction(void(*function)(), int order = 0)
-        : InitFunctionBase(order)
-    {
-        m_function = function;
+	InitFunction(void(*function)(), int order = 0)
+		: InitFunctionBase(order)
+	{
+		m_function = function;
 
-        Register();
-    }
+		Register();
+	}
 
-    virtual void Run()
-    {
-        m_function();
-    }
+	virtual void Run()
+	{
+		m_function();
+	}
 };
